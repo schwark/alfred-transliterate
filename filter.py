@@ -56,7 +56,6 @@ def add_config_commands(wf, query, config_commands):
         elif config_command_list[0] in config_commands:
             param = query.lower().split(' ')[1] if (query and ' ' in query) else ''
             if 'lang' == config_command_list[0]:
-                query = ''
                 results = wf.filter(param, languages.values(), key=search_key_for_language, min_score=80)
                 if results:
                     for line in results:
@@ -67,7 +66,6 @@ def add_config_commands(wf, query, config_commands):
                                     icon=ICON_COLOR,
                                     valid=True)
             elif 'scheme' == config_command_list[0]:
-                query = ''
                 lang = wf.stored_data('transliterate_lang')
                 if lang:
                     param = query.lower().split(' ')[1] if (query and ' ' in query) else ''
