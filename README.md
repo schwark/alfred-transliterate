@@ -37,13 +37,13 @@ This is how to transliterate any message - result will be copied to the clipboar
 ## Reinitialize
 
 ```
-sl reinit
+tl reinit
 ```
 This should only be needed if you ever want to start again for whatever reason - removes all API keys, devices, scenes, etc.
 
 ## Update
 
 ```
-sl workflow:update
+tl workflow:update
 ```
 An update notification should show up when an update is available, but if not invoking this should update the workflow to latest version on github
