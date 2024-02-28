@@ -68,10 +68,11 @@ def add_config_commands(wf, query, config_commands):
                                     icon=ICON_COLOR,
                                     valid=True)
             elif 'sch' == config_command_list[0]:
-                lang = wf.settings.get('transliterate_lang')
-                if lang:
+                langs = (wf.settings.get('transliterate_lang') or '').split(',')
+                for lang in langs:
+                    if not is_chinese(lang): continue
                     param = query.lower().split(' ')[1] if (query and ' ' in query) else ''
-                    results = wf.filter(param, input_schemes.values(), min_score=80)
+                    results = wf.filter(param, input_schemes[lang], min_score=80)
                     if results:
                         for line in results:
                             wf.add_item(line,

@@ -57,7 +57,7 @@ def handle_config_commands(wf, args):
         log.debug('saving scheme '+args.scheme)
         wf.settings['transliterate_scheme'] = args.scheme
         wf.settings.save()
-        qnotify('Transliterate', 'Scheme set to '+input_schemes[args.scheme])
+        qnotify('Transliterate', 'Scheme set to '+args.scheme)
         return True
     
 def handle_copy_command(wf, args):
