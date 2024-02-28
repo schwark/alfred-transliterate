@@ -166,7 +166,8 @@ def main(wf):
             # retrieve cached clients and devices
             # Single client only, no command or not complete command yet so populate with all the commands
             try:
-                name = transliterate_text(query, lang_code=lang, input_scheme=scheme) if is_chinese(lang) else transliterate_text(query, lang_code=lang)
+#                name = transliterate_text(query, lang_code=lang, input_scheme=scheme) if is_chinese(lang) else transliterate_text(query, lang_code=lang)
+                name = transliterate_text(query, lang_code=lang)
                 wf.add_item(title=name,
                         subtitle=languages[lang]['eng'],
                         arg=' --copy '+name,

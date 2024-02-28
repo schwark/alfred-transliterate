@@ -3,7 +3,7 @@ import json
 import sys
 from .numerals import transliterate_numerals
 
-G_API_DEFAULT = 'https://inputtools.google.com/request?text=%s&itc=%s-t-i0&num=%d'
+G_API_DEFAULT = 'https://inputtools.google.com/request?text=%s&itc=%s-t-i0-und&num=%d'
 G_API_CHINESE = 'https://inputtools.google.com/request?text=%s&itc=%s-t-i0-%s&num=%d'
 
 CHINESE_LANGS = {'yue-hant', 'zh', 'zh-hant'}
