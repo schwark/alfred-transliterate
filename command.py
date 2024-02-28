@@ -34,10 +34,23 @@ def handle_config_commands(wf, args):
         return True
 
     if args.lang:
-        log.debug('saving lang '+args.lang)
-        wf.settings['transliterate_lang'] = args.lang
+        log.debug('adding lang '+args.lang)
+        langs = (wf.settings.get('transliterate_lang') or '').split(',')
+        if args.lang not in langs:
+            langs.append(args.lang)
+        wf.settings['transliterate_lang'] = ','.join(langs)
         wf.settings.save()
-        qnotify('Transliterate', 'Language set to '+languages[args.lang]['eng'])
+        qnotify('Transliterate', 'Added '+languages[args.lang]['eng']+' to languages')
+        return True
+
+    if args.dellang:
+        log.debug('removing lang '+args.dellang)
+        langs = (wf.settings.get('transliterate_lang') or '').split(',')
+        if args.dellang in langs:
+            langs.remove(args.dellang)
+        wf.settings['transliterate_lang'] = ','.join(langs)
+        wf.settings.save()
+        qnotify('Transliterate', 'Removed '+languages[args.dellang]['eng']+' from languages')
         return True
 
     if args.scheme:
@@ -62,6 +75,7 @@ def main(wf):
     # value to 'apikey' (dest). This will be called from a separate "Run Script"
     # action with the API key
     parser.add_argument('--lang', dest='lang', nargs='?', default=None)
+    parser.add_argument('--dellang', dest='dellang', nargs='?', default=None)
     parser.add_argument('--scheme', dest='scheme', nargs='?', default=None)
     parser.add_argument('--copy', dest='copy', nargs='?', default=None)
     # reinitialize 

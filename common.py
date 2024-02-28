@@ -30,9 +30,9 @@ languages = {
     'ja': { 'code': 'ja', 'eng': 'Japanese', 'lng': '日本語'},     
     'th': { 'code': 'th', 'eng': 'Thai', 'lng': 'ภาษาไทย'},     
     'ti': { 'code': 'ti', 'eng': 'Tigrinya', 'lng': 'ትግርኛ'},     
-    'zh': { 'code': 'zh', 'eng': 'Simplified Chinese', 'lng': 'ትግርኛ'},     
-    'zh-hant': { 'code': 'zh-hant', 'eng': 'Traditional Chinese', 'lng': 'ትግርኛ'},     
-    'yue-hant': { 'code': 'yue-hant', 'eng': 'Yue', 'lng': 'ትግርኛ'}
+    'zh': { 'code': 'zh', 'eng': 'Simplified Chinese', 'lng': '中国'},     
+    'zh-hant': { 'code': 'zh-hant', 'eng': 'Traditional Chinese', 'lng': '中國'},     
+    'yue-hant': { 'code': 'yue-hant', 'eng': 'Yue', 'lng': '中國'}
 }
 
 input_schemes = {

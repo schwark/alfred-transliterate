@@ -55,18 +55,20 @@ def add_config_commands(wf, query, config_commands):
                             valid=config_commands[cmd]['valid'])
         elif config_command_list[0] in config_commands:
             param = query.lower().split(' ')[1] if (query and ' ' in query) else ''
-            if 'lang' == config_command_list[0]:
-                results = wf.filter(param, languages.values(), key=search_key_for_language, min_score=80)
+            if config_command_list[0] in ['add','del']:
+                cmds = {'add': {'arg':'lang', 'list':languages.keys()}, 'del': {'arg':'dellang', 'list': (wf.settings.get('transliterate_lang') or '').split(',')}}
+                results = wf.filter(param, cmds[config_command_list[0]]['list'], key=search_key_for_language, min_score=80)
                 if results:
                     for line in results:
-                        wf.add_item(line['eng'],
-                                    line['lng'],
-                                    arg='--lang '+line['code'],
-                                    autocomplete=line['eng'],
+                        lang = languages[line]
+                        wf.add_item(config_command_list[0].capitalize()+' '+lang['eng'],
+                                    lang['lng'],
+                                    arg='--'+cmds[config_command_list[0]]['arg']+' '+lang['code'],
+                                    autocomplete=lang['eng'],
                                     icon=ICON_COLOR,
                                     valid=True)
-            elif 'scheme' == config_command_list[0]:
-                lang = wf.stored_data('transliterate_lang')
+            elif 'sch' == config_command_list[0]:
+                lang = wf.settings.get('transliterate_lang')
                 if lang:
                     param = query.lower().split(' ')[1] if (query and ' ' in query) else ''
                     results = wf.filter(param, input_schemes.values(), min_score=80)
@@ -80,12 +82,12 @@ def add_config_commands(wf, query, config_commands):
                                         valid=True)
     return query
 
-def search_key_for_language(language):
+def search_key_for_language(lang):
     """Generate a string search key for a domain"""
     elements = []
-    elements.append(language['eng'])  
-    elements.append(language['lng'])  
-    elements.append(language['code'])  
+    elements.append(languages[lang]['eng'])  
+    elements.append(languages[lang]['lng'])  
+    elements.append(languages[lang]['code'])  
     return u' '.join(elements)
 
 def is_chinese(lang):
@@ -107,18 +109,26 @@ def main(wf):
 
     # list of commands
     config_commands = {
-        'lang': {
-            'title': 'Set language',
-            'subtitle': 'Set the target language',
-            'autocomplete': 'lang',
+        'add': {
+            'title': 'Add a language',
+            'subtitle': 'Add a target language',
+            'autocomplete': 'add',
             'args': ' --lang '+(words[1] if len(words)>1 else ''),
             'icon': ICON_WEB,
             'valid': len(words) > 1
         },
-        'scheme': {
+        'del': {
+            'title': 'Remove a language',
+            'subtitle': 'Remove a target language',
+            'autocomplete': 'del',
+            'args': ' --dellang '+(words[1] if len(words)>1 else ''),
+            'icon': ICON_WEB,
+            'valid': len(words) > 1
+        },
+        'sch': {
             'title': 'Set input scheme',
             'subtitle': 'Set the input scheme',
-            'autocomplete': 'scheme',
+            'autocomplete': 'sch',
             'args': ' --scheme '+(words[1] if len(words)>1 else ''),
             'icon': ICON_WEB,
             'valid': len(words) > 1
@@ -148,17 +158,22 @@ def main(wf):
         return 0
  
     if query:
-        lang = wf.settings.get('transliterate_lang')
-        scheme = wf.settings.get('transliterate_scheme') if is_chinese(lang) else None
-        # retrieve cached clients and devices
-        # Single client only, no command or not complete command yet so populate with all the commands
-        name = transliterate_text(query, lang_code=lang, input_scheme=scheme) if is_chinese(lang) else transliterate_text(query, lang_code=lang)
-        wf.add_item(title=name,
-                subtitle=languages[lang]['eng'],
-                arg=' --copy '+name,
-                autocomplete=name,
-                valid=True,
-                icon=ICON_NOTE)
+        langs = wf.settings.get('transliterate_lang').split(',')
+        log.debug('langs are '+str(langs))
+        for lang in langs:
+            scheme = wf.settings.get('transliterate_scheme') if is_chinese(lang) else None
+            # retrieve cached clients and devices
+            # Single client only, no command or not complete command yet so populate with all the commands
+            try:
+                name = transliterate_text(query, lang_code=lang, input_scheme=scheme) if is_chinese(lang) else transliterate_text(query, lang_code=lang)
+                wf.add_item(title=name,
+                        subtitle=languages[lang]['eng'],
+                        arg=' --copy '+name,
+                        autocomplete=name,
+                        valid=True,
+                        icon=ICON_NOTE)
+            except:
+                log.debug('transliteration failed for '+languages[lang]['eng'])
         # Send the results to Alfred as XML
     wf.send_feedback()
     return 0

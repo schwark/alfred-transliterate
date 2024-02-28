@@ -14,14 +14,19 @@ chmod +x workflow-build
 ## Language
 
 ```
-tl lang <language>
+tl add <language>
 ```
-This should only be needed once per install or after a reinit, or anytime you want to change language to transliterate to
+This should only be needed once per install or after a reinit, or anytime you want to add a language to transliterate to
+
+```
+tl del <language>
+```
+This should only be needed anytime you want to remove a language to transliterate to
 
 ## Input Scheme
 
 ```
-tl scheme <input-scheme>
+tl sch <input-scheme>
 ```
 This should only be needed once per install or after a reinit, or anytime you want to change input scheme for transliteration to chinese like languages
 
