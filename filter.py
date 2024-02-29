@@ -65,7 +65,7 @@ def add_config_commands(wf, query, config_commands):
                                     lang['lng'],
                                     arg='--'+cmds[config_command_list[0]]['arg']+' '+lang['code'],
                                     autocomplete=lang['eng'],
-                                    icon=ICON_COLOR,
+                                    icon='icons/'+lang['eng'].lower()+'.png',
                                     valid=True)
             elif 'sch' == config_command_list[0]:
                 langs = (wf.settings.get('transliterate_lang') or '').split(',')
@@ -173,7 +173,7 @@ def main(wf):
                         arg=' --copy '+name,
                         autocomplete=name,
                         valid=True,
-                        icon=ICON_NOTE)
+                        icon='icons/'+languages[lang]['eng'].lower()+'.png')
             except:
                 log.debug('transliteration failed for '+languages[lang]['eng'])
         # Send the results to Alfred as XML
